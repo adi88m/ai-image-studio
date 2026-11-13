@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="author" content="adi88m">
+  <meta name="description" content="AI Image & Background Studio 10-in-1 oleh adi88m — Edit Foto AI, Hapus Background, Pas Foto Cetak 4R, CamScanner, OCR, Kompresor Target KB & Batch ZIP 100% Client-Side.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="canonical" href="https://adi88m.blogspot.com">
+  <link rel="manifest" href="./manifest.json">
+  <title>AI Image & Background Studio — adi88m</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@700&family=Montserrat:wght@800&family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/studio.css?v=2026.11.1">
+</head>
+<body>
+  <div id="studio-app" class="studio-shell">
+    <!-- Top Header Bar -->
+    <header class="studio-header">
+      <div class="brand-area">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 36 36" width="28" height="28">
+            <defs>
+              <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <rect width="36" height="36" rx="10" fill="url(#brandGrad)"/>
+            <circle cx="18" cy="18" r="8.5" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+            <circle cx="18" cy="18" r="3.5" fill="#ffffff"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>AI Image Studio</h1>
+          <a href="https://adi88m.blogspot.com" target="_blank" rel="noopener" class="brand-badge">by adi88m</a>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" id="btn-undo" class="icon-btn" title="Urungkan (Ctrl+Z)" disabled aria-label="Undo">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+        </button>
+        <button type="button" id="btn-redo" class="icon-btn" title="Ulangi (Ctrl+Y)" disabled aria-label="Redo">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+        </button>
+        <button type="button" id="btn-split-compare" class="icon-btn" title="Bandingkan Sebelum/Sesudah" aria-label="Bandingkan">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+        </button>
+        <button type="button" id="btn-touch-lock" class="icon-btn" title="Kunci Kanvas (Agar Scroll Blog Lancar)" aria-label="Kunci Kanvas">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        </button>
+        <button type="button" id="btn-theme-toggle" class="icon-btn" title="Ganti Tema Gelap/Terang" aria-label="Tema">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <button type="button" id="btn-fullscreen" class="icon-btn accent-outline" title="Layar Penuh / Tab Mandiri" aria-label="Layar Penuh">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- In-App WebView Warning Banner (Auto-shown only when needed) -->
+    <div id="webview-banner" class="webview-banner hidden" role="alert">
+      <span>Terbuka di browser aplikasi. Untuk simpan file lebih lancar, buka di Chrome/Safari.</span>
+      <button type="button" id="btn-popout-browser" class="btn-xs">Buka Penuh</button>
+    </div>
+
+    <!-- 10-in-1 Tool Hub Navigation -->
+    <nav class="tool-hub-nav" aria-label="Menu Alat Studio">
+      <button type="button" class="hub-tab active" data-hub="ai-studio">✨ AI Studio</button>
+      <button type="button" class="hub-tab" data-hub="id-photo">🪪 Pas Foto & 4R</button>
+      <button type="button" class="hub-tab" data-hub="retouch">🖌️ Kuas & Sensor</button>
+      <button type="button" class="hub-tab" data-hub="product">🛍️ Produk & Mockup</button>
+      <button type="button" class="hub-tab" data-hub="optimizer">⚡ Kompres KB & PDF</button>
+      <button type="button" class="hub-tab" data-hub="scanner">📄 CamScanner & TTD</button>
+      <button type="button" class="hub-tab" data-hub="social">📱 IG Grid, Stiker & QR</button>
+      <button type="button" class="hub-tab" data-hub="ocr-collage">🔤 OCR & Kolase</button>
+      <button type="button" class="hub-tab" data-hub="batch">📦 Batch ZIP</button>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="studio-workspace">
+      <!-- Viewport Canvas Stage -->
+      <section class="canvas-stage" id="canvas-stage">
+        <div class="canvas-wrapper" id="canvas-wrapper">
+          <canvas id="main-canvas"></canvas>
+          <canvas id="overlay-canvas"></canvas>
+
+          <!-- AI Scan Line Overlay -->
+          <div id="ai-scan-overlay" class="ai-scan-overlay hidden">
+            <div class="scan-laser"></div>
+            <div class="scan-status-box">
+              <span id="scan-status-text">Memuat Mesin AI Lokal...</span>
+              <div class="progress-track"><div id="scan-progress-bar" class="progress-fill"></div></div>
+            </div>
+          </div>
+
+          <!-- Floating Zoom Loupe 2.5x for Mobile Brush -->
+          <div id="zoom-loupe" class="zoom-loupe hidden" aria-hidden="true">
+            <canvas id="loupe-canvas" width="120" height="120"></canvas>
+            <div class="loupe-crosshair"></div>
+          </div>
+
+          <!-- Before/After Split Slider Handle -->
+          <div id="split-slider-ui" class="split-slider-ui hidden">
+            <div class="split-line"></div>
+            <div class="split-knob" id="split-knob" role="slider" aria-label="Geser Perbandingan" tabindex="0">⇄</div>
+          </div>
+
+          <!-- Empty State / Onboarding Samples -->
+          <div id="empty-onboarding" class="empty-onboarding">
+            <div class="upload-dropzone" id="upload-dropzone">
+              <div class="upload-icon">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <h2>Pilih atau Seret Foto ke Sini</h2>
+              <p>Mendukung JPG, PNG, WebP, & HEIC iPhone • 100% Diproses di Perangkatmu</p>
+              <div class="upload-cta-row">
+                <label for="file-input-primary" class="btn-primary">
+                  <span>📂 Pilih dari Galeri</span>
+                </label>
+                <label for="file-input-camera" class="btn-secondary">
+                  <span>📷 Kamera</span>
+                </label>
+              </div>
+              <input type="file" id="file-input-primary" accept="image/jpeg,image/png,image/webp,image/heic,image/*" class="sr-only">
+              <input type="file" id="file-input-camera" accept="image/*" capture="environment" class="sr-only">
+            </div>
+
+            <div class="sample-gallery">
+              <span class="sample-label">Atau coba langsung 1-klik dengan foto sampel:</span>
+              <div class="sample-cards">
+                <button type="button" class="sample-card" data-sample="portrait">
+                  <span class="sample-badge">Pas Foto</span>
+                  <small>Uji Ganti Latar</small>
+                </button>
+                <button type="button" class="sample-card" data-sample="product">
+                  <span class="sample-badge">Produk UMKM</span>
+                  <small>Uji Shadow & Poster</small>
+                </button>
+                <button type="button" class="sample-card" data-sample="couple">
+                  <span class="sample-badge">2 Subjek</span>
+                  <small>Uji Gabung Foto</small>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Floating Stage Controls -->
+        <div class="stage-floating-bar" id="stage-floating-bar">
+          <label for="file-input-add-layer" class="chip-btn" title="Tambah Subjek ke-2 / Gambar Lapisan">+ Subjek 2</label>
+          <input type="file" id="file-input-add-layer" accept="image/jpeg,image/png,image/webp,image/heic,image/*" class="sr-only">
+          <button type="button" id="btn-layers-drawer" class="chip-btn">🗂️ Layer (<span id="layer-count">0</span>)</button>
+          <button type="button" id="btn-export-primary" class="chip-btn primary-chip">⬇️ Simpan / Unduh</button>
+        </div>
+      </section>
+
+      <!-- CapCut-Style Contextual Control Panel -->
+      <section class="control-dock" id="control-dock">
+        <!-- Dynamic Active Control Drawer (Single focused control) -->
+        <div class="active-control-drawer" id="active-control-drawer">
+          <div class="drawer-placeholder">
+            Pilih foto untuk mulai mengedit, atau pilih alat pada bilah di bawah.
+          </div>
+        </div>
+
+        <!-- Contextual Sub-Action Strip -->
+        <div class="sub-action-strip" id="sub-action-strip"></div>
+      </section>
+    </main>
+
+    <!-- Layers & Diagnostic Drawer Modal -->
+    <aside id="layers-modal" class="side-drawer hidden" aria-label="Manajemen Lapisan">
+      <div class="drawer-header">
+        <h3>Susunan Lapisan (Layers)</h3>
+        <button type="button" id="btn-close-layers" class="icon-btn">✕</button>
+      </div>
+      <div id="layers-list" class="layers-list"></div>
+      <div class="drawer-footer">
+        <button type="button" id="btn-add-text-layer" class="btn-secondary btn-sm">+ Teks</button>
+        <button type="button" id="btn-add-shape-layer" class="btn-secondary btn-sm">+ Bentuk/Panah</button>
+      </div>
+    </aside>
+
+    <!-- Export & Mobile Save Fallback Modal -->
+    <div id="export-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="export-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="export-modal-title">Simpan Hasil Studio</h3>
+          <button type="button" id="btn-close-export" class="icon-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="export-preview-box">
+            <img id="export-preview-img" alt="Pratinjau Hasil">
+            <span id="export-meta-info" class="meta-pill">PNG • HD</span>
+          </div>
+          <div class="export-options-grid">
+            <label>Format File
+              <select id="export-format">
+                <option value="image/png">PNG (Transparan / Kualitas Penuh)</option>
+                <option value="image/jpeg">JPG (Ukuran Ringan)</option>
+                <option value="image/webp">WebP (Stiker / Web Modern)</option>
+              </select>
+            </label>
+            <label>Kualitas / Resolusi
+              <select id="export-scale">
+                <option value="1">Standar (1x Preview)</option>
+                <option value="2" selected>HD (2x Tajam)</option>
+                <option value="3">Cetak 300 DPI (Maksimal)</option>
+              </select>
+            </label>
+          </div>
+          <div class="export-actions">
+            <button type="button" id="btn-trigger-download" class="btn-primary full-width">⬇️ Unduh Langsung ke Perangkat</button>
+            <button type="button" id="btn-trigger-share" class="btn-secondary full-width">📤 Bagikan / Simpan ke Galeri HP</button>
+          </div>
+          <p class="mobile-hint">Jika unduhan otomatis tertahan di browser aplikasi, <strong>tekan lama pada gambar pratinjau di atas</strong> lalu pilih <em>Simpan Gambar</em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Toast Notification -->
+    <div id="studio-toast" class="studio-toast hidden" role="status" aria-live="polite"></div>
+
+    <!-- Compact Footer -->
+    <footer class="studio-footer">
+      <span>© 2026 <a href="https://adi88m.blogspot.com" target="_blank" rel="noopener">adi88m.blogspot.com</a> • 100% Client-Side Privacy</span>
+      <button type="button" id="btn-clear-cache" class="link-btn">Reset Cache</button>
+    </footer>
+  </div>
+
+  <!-- Core Scripts (Zero-Bug Deferred Order) -->
+  <script type="module" src="./js/app.js?v=2026.11.1"></script>
+</body>
+</html>
