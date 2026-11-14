@@ -1,5 +1,6 @@
 import { StudioBus } from './core-bus.js';
 import { StateStore, clamp } from './state-manager.js';
+import { AssetVault } from './media-loader.js';
 import { RenderEngine } from './render-engine.js';
 import { BrushTools } from './brush-tools.js';
 import { AISegmenter } from './ai-segmenter.js';
@@ -162,16 +163,29 @@ class LayerCompositorController {
       activeLayer.x = nextX;
       activeLayer.y = nextY;
       RenderEngine.requestRender();
-    } else if (this.gestureStart.mode === 'pinch' && this.pointers.size === 2) {
+      } else if (this.gestureStart.mode === 'pinch' && this.pointers.size === 2) {
       const [p1, p2] = [...this.pointers.values()];
       const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
       const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
 
       const scaleFactor = dist / this.gestureStart.startDist;
-      activeLayer.scale = clamp(this.gestureStart.origScale * scaleFactor, 0.1, 4.5, 0.78);
+      activeLayer.scale = clamp(this.gestureStart.origScale * scaleFactor, 0.1, 4.5, 1);
 
       const deltaDeg = ((angle - this.gestureStart.startAngle) * 180) / Math.PI;
       activeLayer.rotation = Math.round((this.gestureStart.origRotation + deltaDeg) % 360);
+      if (activeLayer.mediaKey && StateStore.state.layers.length === 1) {
+        const asset = AssetVault.getAsset(activeLayer.mediaKey);
+        if (asset) {
+          const rad = (activeLayer.rotation * Math.PI) / 180;
+          const absCos = Math.abs(Math.cos(rad));
+          const absSin = Math.abs(Math.sin(rad));
+          StateStore.state.canvas.width = Math.ceil(asset.width * absCos + asset.height * absSin);
+          StateStore.state.canvas.height = Math.ceil(asset.width * absSin + asset.height * absCos);
+          activeLayer.x = 0.5;
+          activeLayer.y = 0.5;
+        }
+      }
+
       RenderEngine.requestRender();
     }
   }
