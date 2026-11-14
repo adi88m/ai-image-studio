@@ -164,7 +164,7 @@ class StudioAppCoordinator {
           name: `Subjek ${idx}`,
           x: idx === 1 ? 0.5 : 0.62,
           y: 0.5,
-          scale: idx === 1 ? 0.92 : 0.72,
+          scale: idx === 1 ? 1 : 0.72,
           mediaKey
         });
 
