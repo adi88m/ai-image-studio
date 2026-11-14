@@ -152,7 +152,8 @@ class DualResolutionRenderEngine {
         const asset = AssetVault.getAsset(layer.mediaKey);
         if (asset) {
           const composed = this.composeMaskedSubject(layer, asset);
-          const baseScale = (Math.min(targetW, targetH) / Math.max(asset.width, asset.height)) * layer.scale;
+          const fitScale = Math.min(targetW / asset.width, targetH /asset.height);
+          const baseScale = fitScale * layer.scale;
           const drawW = asset.width * baseScale;
           const drawH = asset.height * baseScale;
 
